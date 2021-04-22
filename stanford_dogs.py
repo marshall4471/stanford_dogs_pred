@@ -48,7 +48,7 @@ cnn.add(tf.keras.layers.Dense(120, activation='sigmoid'))
 cnn.compile(optimizer = 'adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 cnn.summary()
 
-history= cnn.fit(train_gen, validation_data = test_gen, epochs=4, verbose=2)
+history= cnn.fit(train_gen, validation_data = test_gen, epochs=15, verbose=2)
 
 cnn.save('dogs_pred.h5')
 
