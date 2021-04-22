@@ -32,23 +32,23 @@ from keras.preprocessing.image import ImageDataGenerator
 
 train_datagen = k.preprocessing.image.ImageDataGenerator(rescale=1./255, horizontal_flip=True)
 
-train_gen = train_datagen.flow_from_directory(directory = file1, subset='training', target_size=(384,384), shuffle=True, class_mode='binary', batch_size=8)
+train_gen = train_datagen.flow_from_directory(directory = file1, subset='training', target_size=(384,384), shuffle=True, class_mode='categorical', batch_size=8)
 test_datagen = k.preprocessing.image.ImageDataGenerator(rescale=1./255)
-test_gen = test_datagen.flow_from_directory(directory= file2, subset='validation', shuffle=True, class_mode='binary', target_size=(384,384), batch_size=8)
+test_gen = test_datagen.flow_from_directory(directory= file2, subset='validation', shuffle=True, class_mode='categorical', target_size=(384,384), batch_size=8)
 
 cnn = tf.keras.models.Sequential()
-cnn.add(tf.keras.layers.Conv2D(128, kernel_size=[5,5], padding='valid', activation='relu', input_shape=[384, 384, 3]))
+cnn.add(tf.keras.layers.Dense(120, input_shape=[384, 384, 3]))
 cnn.add(tf.keras.layers.MaxPooling2D(pool_size=[3,3], strides=2, padding='valid'))
 cnn.add(tf.keras.layers.Conv2D(64, kernel_size=[3,3], padding='valid', activation='relu'))
 cnn.add(tf.keras.layers.MaxPooling2D(pool_size=[3,3], strides=2, padding='valid'))
 cnn.add(tf.keras.layers.Conv2D(32, kernel_size=[3,3],padding='valid', activation='relu' ))
 cnn.add(tf.keras.layers.MaxPooling2D(pool_size=[3,3], strides=2, padding='valid'))
 cnn.add(tf.keras.layers.Flatten())
-cnn.add(tf.keras.layers.Dense(1, activation='sigmoid'))
+cnn.add(tf.keras.layers.Dense(120, activation='sigmoid'))
 cnn.compile(optimizer = 'adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 cnn.summary()
 
-history= cnn.fit(train_gen, validation_data = test_gen, epochs=1, verbose=2)
+history= cnn.fit(train_gen, validation_data = test_gen, epochs=4, verbose=2)
 
 cnn.save('dogs_pred.h5')
 
